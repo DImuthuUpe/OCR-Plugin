@@ -1,4 +1,4 @@
-package org.apache.ocr;
+package org.apache.pdfbox.ocr;
 
 public class LocationData {
 	private String word;

@@ -7,11 +7,31 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>OCR-Plugin</artifactId>
+	<build>
+	    <plugins>
+	        
+	        <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+				    <!--argLine>-Xmx1024m</argLine-->
+					<!--forkMode>always</forkMode-->
+				</configuration>
+			</plugin>
+	    </plugins>
+	    
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.pdfbox.ocr</groupId>
 			<artifactId>Tesseract-JNI-Wrapper</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
