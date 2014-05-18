@@ -15,7 +15,7 @@ public class Tesseract_OCRConnector_getLocationData_OK_Test extends TestCase {
 			conn = OCRConnectorFactory.createOCRConnector("tesseract");
 			conn.init();
 			PDDocument document = PDDocument
-					.load("src/test/resources/samples/pdf1.pdf");
+					.load("/Users/dimuthuupeksha/Documents/Academic/OCR-Plugin/Hello_World.pdf");
 			PDFRenderer renderer = new PDFRenderer(document);
 			BufferedImage image = renderer.renderImage(0, 3);
 			conn.setBufferedImage(image);
