@@ -12,23 +12,22 @@ public class TesseractOCRConnector implements OCRConnector{
 	public TesseractOCRConnector(){
 		api = new TessBaseAPI();
 	}
-	
-	@Override
+
 	public void setBufferedImage(BufferedImage image) {
 		api.setBufferedImage(image);	
 	}
 
-	@Override
+
 	public boolean init() {
 		return api.init(TessBaseAPI.DEFAULT_DATA_PATH,TessBaseAPI.DEFAULT_LANG);
 	}
 
-	@Override
+
 	public String getUTF8Text() {
 		return api.getUTF8Text();
 	}
 
-	@Override
+
 	public LocationData[] getLocationData() {
 		api.getResultIterator();
 		ArrayList<LocationData> dataList = new ArrayList<LocationData>();
@@ -38,11 +37,11 @@ public class TesseractOCRConnector implements OCRConnector{
 				String locationString = api.getBoundingBox();
 				String locationArr[] = locationString.split(",");
 				if(word!=null&&locationArr!=null&&locationArr.length==4){
-					int box_x1, box_y1, box_x2, box_y2;
-					box_x1 = Integer.parseInt(locationArr[0]);
-					box_y1 = Integer.parseInt(locationArr[1]);
-					box_x2 = Integer.parseInt(locationArr[2]);
-					box_y2 = Integer.parseInt(locationArr[3]);
+					float box_x1, box_y1, box_x2, box_y2;
+					box_x1 = Float.parseFloat(locationArr[0]);
+					box_y1 = Float.parseFloat(locationArr[1]);
+					box_x2 = Float.parseFloat(locationArr[2]);
+					box_y2 = Float.parseFloat(locationArr[3]);
 					LocationData locData = new LocationData(word, box_x1, box_y1, box_x2, box_y2);
 					dataList.add(locData);
 				}
@@ -54,10 +53,12 @@ public class TesseractOCRConnector implements OCRConnector{
 		return locationDataArray;
 	}
 
-	@Override
+
 	public void end() {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 }
