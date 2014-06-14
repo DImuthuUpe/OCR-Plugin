@@ -24,6 +24,7 @@ public class PDFOCRTextStripper extends PDFTextStripper {
 	private int zoomFactor =3;
 	public PDFOCRTextStripper() throws IOException {
 		super();
+		setSortByPosition(true);
 	}
 	
 	private LocationData[] normalizeLocationData(LocationData[] data,int height){
@@ -47,7 +48,7 @@ public class PDFOCRTextStripper extends PDFTextStripper {
 			conn = OCRConnectorFactory.createOCRConnector("tesseract");
 			conn.init();
 			PDFRenderer renderer = new PDFRenderer(document);
-			BufferedImage image = renderer.renderImage(0, zoomFactor);
+			BufferedImage image = renderer.renderImage(currentPageNo, zoomFactor);
 			int width= image.getWidth()/zoomFactor;
 			int height = image.getHeight()/zoomFactor;
 			
@@ -60,24 +61,25 @@ public class PDFOCRTextStripper extends PDFTextStripper {
 				System.out.print(locationData[i].getBox_x1()+ ",");
 				System.out.print(locationData[i].getBox_y1()+ ",");
 				System.out.print(locationData[i].getBox_x2()+ ",");
-				System.out.println(locationData[i].getBox_y2());
+				System.out.println(locationData[i].getBox_y2()+",");
 				TextPosition textPosition = generateTextPosition(locationData[i], width, height, rotation);
 				processTextPosition(textPosition);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		currentPageNo++;
     }
 	
 	private TextPosition generateTextPosition(LocationData locationData,float pageWidth,float pageHeight,int rotation){
 		
     	Matrix textMatrixStart = new Matrix();
-    	textMatrixStart.setValue(0, 0, 12);
+    	textMatrixStart.setValue(0, 0, 1);
     	textMatrixStart.setValue(0, 1, 0);
     	textMatrixStart.setValue(0, 2, 0);
     	
     	textMatrixStart.setValue(1, 0, 0);
-    	textMatrixStart.setValue(1, 1, 12);
+    	textMatrixStart.setValue(1, 1, 1);
     	textMatrixStart.setValue(1, 2, 0);
     	
     	textMatrixStart.setValue(2, 0, locationData.getBox_x1());
@@ -86,9 +88,9 @@ public class PDFOCRTextStripper extends PDFTextStripper {
     	
     	float endXPosition = locationData.getBox_x2();
     	float endYPosition =locationData.getBox_y2();
-    	float totalVerticalDisplacementDisp =8.0f;
+    	float totalVerticalDisplacementDisp =locationData.getBox_y1()-locationData.getBox_y2(); //Maximum error is height of the word
     	float widthText = locationData.getBox_x2()-locationData.getBox_x1();
-    	float spaceWidthDisp = 5.0f;
+    	
     	String c = locationData.getWord();
     	int []codePoints = new int[c.length()];
     	
@@ -97,8 +99,9 @@ public class PDFOCRTextStripper extends PDFTextStripper {
     	}
     	
     	PDFont font = new PDType1Font();
-    	float fontSizeText = 12.0f;
-    	
+    	float fontSizeText = widthText/c.length();
+    	float spaceWidthDisp = fontSizeText/2; // This is an approximation for space width
+
     	TextPosition textPosition = new TextPosition(rotation, pageWidth, pageHeight, textMatrixStart, endXPosition,
         endYPosition, totalVerticalDisplacementDisp, widthText, spaceWidthDisp, c, codePoints, font,
         fontSizeText,12);
