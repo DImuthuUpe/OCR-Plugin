@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 public class Create_Tesseract_OCRConnector_Not_Null_Test{
 	@Test
-	@Ignore
 	public void test() {
 		OCRConnector conn=null;
 		try {

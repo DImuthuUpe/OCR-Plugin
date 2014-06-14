@@ -13,7 +13,6 @@ import static org.junit.Assert.assertNotNull;
  */
 public class PDFOCTRTextStripper_Test{
 	@Test
-	@Ignore
     public void testPDF1() throws IOException{
         PDFTextStripper ocrStripper = new PDFOCRTextStripper();
         //PDFTextStripper ocrStripper = new PDFTextStripper();
@@ -24,7 +23,6 @@ public class PDFOCTRTextStripper_Test{
         assertNotNull(ocrStripper);
     }
 	@Test
-	@Ignore
     public void testPDF2() throws IOException{
         PDFTextStripper ocrStripper = new PDFOCRTextStripper();
         //PDFTextStripper ocrStripper = new PDFTextStripper();

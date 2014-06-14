@@ -52,16 +52,16 @@ public class PDFOCRTextStripper extends PDFTextStripper {
 			int width= image.getWidth()/zoomFactor;
 			int height = image.getHeight()/zoomFactor;
 			
-			System.out.println("Width "+width + " Height "+height );
+			//System.out.println("Width "+width + " Height "+height );
 			conn.setBufferedImage(image);
 			locationData = conn.getLocationData();
 			locationData = normalizeLocationData(locationData,height);
 			for (int i = 0; i < locationData.length; i++) {
-				System.out.print(locationData[i].getWord()+ " ");
+				/*System.out.print(locationData[i].getWord()+ " ");
 				System.out.print(locationData[i].getBox_x1()+ ",");
 				System.out.print(locationData[i].getBox_y1()+ ",");
 				System.out.print(locationData[i].getBox_x2()+ ",");
-				System.out.println(locationData[i].getBox_y2()+",");
+				System.out.println(locationData[i].getBox_y2()+",");*/
 				TextPosition textPosition = generateTextPosition(locationData[i], width, height, rotation);
 				processTextPosition(textPosition);
 			}

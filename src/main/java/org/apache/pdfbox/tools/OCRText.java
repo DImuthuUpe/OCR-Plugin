@@ -258,9 +258,7 @@ public class OCRText {
 		System.err
 				.println("Usage: java -jar pdfbox-app-x.y.z.jar ExtractText [OPTIONS] <PDF file> [Text File]\n"
 						+ "  -password  <password>        Password to decrypt document\n"
-						+ "  -encoding  <output encoding> (ISO-8859-1,UTF-16BE,UTF-16LE,...)\n"
 						+ "  -console                     Send text to console instead of file\n"
-						+ "  -html                        Output in HTML format instead of raw text\n"
 						+ "  -sort                        Sort the text before writing\n"
 						+ "  -ignoreBeads                 Disables the separation by beads\n"
 						+ "  -force                       Enables pdfbox to ignore corrupt objects\n"
