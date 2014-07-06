@@ -1,3 +1,20 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.pdfbox.utils;
 
 import org.apache.pdfbox.cos.COSStream;
@@ -20,7 +37,6 @@ import java.io.IOException;
  * Created by dimuthuupeksha on 3/26/14.
  */
 public class PDFOCRTextStripper extends PDFTextStripper {
-	private int currentPageNo=0;
 	private int zoomFactor =3;
 	public PDFOCRTextStripper() throws IOException {
 		super();
@@ -48,7 +64,7 @@ public class PDFOCRTextStripper extends PDFTextStripper {
 			conn = OCRConnectorFactory.createOCRConnector("tesseract");
 			conn.init();
 			PDFRenderer renderer = new PDFRenderer(document);
-			BufferedImage image = renderer.renderImage(currentPageNo, zoomFactor);
+			BufferedImage image = renderer.renderImage(getCurrentPageNo()-1, zoomFactor);
 			int width= image.getWidth()/zoomFactor;
 			int height = image.getHeight()/zoomFactor;
 			
@@ -68,7 +84,6 @@ public class PDFOCRTextStripper extends PDFTextStripper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		currentPageNo++;
     }
 	
 	private TextPosition generateTextPosition(LocationData locationData,float pageWidth,float pageHeight,int rotation){
