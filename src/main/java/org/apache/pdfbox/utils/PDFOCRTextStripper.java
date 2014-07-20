@@ -57,7 +57,7 @@ public class PDFOCRTextStripper extends PDFTextStripper {
     public void processStream(PDResources resources, COSStream cosStream,
     		PDRectangle drawingSize, int rotation) throws IOException {
 		
-		
+
 		OCRConnector conn = null;
 		LocationData[] locationData = null;
 		try {

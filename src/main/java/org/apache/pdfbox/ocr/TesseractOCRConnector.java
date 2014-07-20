@@ -75,7 +75,11 @@ public class TesseractOCRConnector implements OCRConnector{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
+
+    @Override
+    public void setSeperationMode(int mode) {
+        api.setSeperationMode(mode);
+    }
+
 
 }

@@ -65,6 +65,11 @@ public class LocationData {
 	public void setBox_y2(float box_y2) {
 		this.box_y2 = box_y2;
 	}
-	
+	public float getBoxWidth(){
+        return getBox_x2()-getBox_x1();
+    }
+    public float getBoxHeight(){
+        return getBox_y1()-getBox_y2();
+    }
 	
 }

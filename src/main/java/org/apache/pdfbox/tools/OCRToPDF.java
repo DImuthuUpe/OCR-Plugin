@@ -35,9 +35,11 @@ public class OCRToPDF {
 
     private static final String START_PAGE = "-startPage";
     private static final String END_PAGE = "-endPage";
+    private static final String SEPARATION = "-s";
 
     private int startPage = 0;
     private int endPage = Integer.MAX_VALUE;
+    private int separationMode= OCRConnector.REL_WORD;
 
     private LocationData[] normalizeLocationData(LocationData[] data, int height, int zoomFactor) {
         for (int i = 0; i < data.length; i++) {
@@ -54,6 +56,8 @@ public class OCRToPDF {
         LocationData[] locationData = null;
         OCRConnector conn = OCRConnectorFactory.createOCRConnector("tesseract");
         conn.init();
+        conn.setSeperationMode(separationMode);
+
         PDFRenderer renderer = new PDFRenderer(document);
         BufferedImage image = renderer.renderImage(pageNo, zoomFactor);
         int width = image.getWidth() / zoomFactor;
@@ -75,16 +79,26 @@ public class OCRToPDF {
             LocationData[] locationData = getPageLocationData(pgNo, document);
 
             PDPage page = document.getPage(pgNo);
-            PDFont font = PDType1Font.HELVETICA_BOLD;
+            PDFont font = PDType1Font.TIMES_ROMAN;
 
             PDPageContentStream contentStream = new PDPageContentStream(document, page, true, false);
-
+            contentStream.appendRawCommands("3 Tr "); // makes text invisible
             contentStream.beginText();
             for (int i = 0; i < locationData.length; i++) {
-                System.out.print(locationData[i].getWord() + " ");
-                System.out.print(locationData[i].getBox_x1() + " ");
-                System.out.println(locationData[i].getBox_y2() + " ");
-                contentStream.setFont(font, 12);
+                //System.out.print(locationData[i].getWord() + " ");
+                //System.out.print(locationData[i].getBoxWidth() + " ");
+
+                float relFontSize = (font.getStringWidth(locationData[i].getWord())/1000);
+                float absoluteFontSize;
+
+                if(relFontSize!=0){
+                    absoluteFontSize = locationData[i].getBoxWidth()/relFontSize;
+                }else{
+                    absoluteFontSize=12;
+                }
+
+                //System.out.println(absoluteFontSize + " ");
+                contentStream.setFont(font, absoluteFontSize);
                 if (i != 0) {
                     contentStream.moveTextPositionByAmount(locationData[i].getBox_x1() - locationData[i - 1].getBox_x1(), locationData[i].getBox_y2() - locationData[i - 1].getBox_y2());
                 } else {
@@ -118,7 +132,25 @@ public class OCRToPDF {
                     usage();
                 }
                 endPage = Integer.parseInt(args[i]);
-            } else {
+            } else if (args[i].equals(SEPARATION)) {
+                i++;
+                if (i >= args.length) {
+                    usage();
+                }
+                separationMode= Integer.parseInt(args[i]);
+                switch (separationMode){
+                    case 0:
+                        separationMode = OCRConnector.REL_SYMBOL;
+                        break;
+                    case 1:
+                        separationMode= OCRConnector.REL_WORD;
+                        break;
+                    default:
+                        usage();
+                        break;
+                }
+
+            }else {
                 if (sourcePDFFile == null) {
                     sourcePDFFile = args[i];
                 } else {
@@ -149,6 +181,7 @@ public class OCRToPDF {
                 .println("Usage: java -jar pdfbox-app-x.y.z.jar OCRToPDF [OPTIONS] <Source PDF file> <Target PDF file>\n"
                         + "  -startPage <number>          The first page to start extraction(1 based)\n"
                         + "  -endPage <number>            The last page to extract(inclusive)\n"
+                        + "  -s <number>                  Separation Mode 0 - Character Level, 1 - Word Level\n"
                         + "  <Source PDF file>            The PDF document to use\n"
                         + "  <Target PDF file>            The target PDF document\n");
         System.exit(1);

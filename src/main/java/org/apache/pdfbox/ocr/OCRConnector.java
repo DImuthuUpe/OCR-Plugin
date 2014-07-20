@@ -20,9 +20,13 @@ package org.apache.pdfbox.ocr;
 import java.awt.image.BufferedImage;
 
 public interface OCRConnector {
+    public static final int REL_WORD = 1;
+    public static final int REL_SYMBOL =0;
+
 	public void setBufferedImage(BufferedImage image);
 	public boolean init();
 	public String getUTF8Text();
 	public LocationData[] getLocationData();
 	public void end();
+    public void setSeperationMode(int mode);
 }
