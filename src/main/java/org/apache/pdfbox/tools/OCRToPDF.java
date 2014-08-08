@@ -35,11 +35,11 @@ public class OCRToPDF {
 
     private static final String START_PAGE = "-startPage";
     private static final String END_PAGE = "-endPage";
-    private static final String SEPARATION = "-s";
+    private static final String RECOGNITION = "-mode";
 
     private int startPage = 0;
     private int endPage = Integer.MAX_VALUE;
-    private int separationMode= OCRConnector.REL_WORD;
+    private int recognitionMode= OCRConnector.REL_WORD;
 
     private LocationData[] normalizeLocationData(LocationData[] data, int height, int zoomFactor) {
         for (int i = 0; i < data.length; i++) {
@@ -56,7 +56,7 @@ public class OCRToPDF {
         LocationData[] locationData = null;
         OCRConnector conn = OCRConnectorFactory.createOCRConnector("tesseract");
         conn.init();
-        conn.setSeperationMode(separationMode);
+        conn.setSeperationMode(recognitionMode);
 
         PDFRenderer renderer = new PDFRenderer(document);
         BufferedImage image = renderer.renderImage(pageNo, zoomFactor);
@@ -132,22 +132,17 @@ public class OCRToPDF {
                     usage();
                 }
                 endPage = Integer.parseInt(args[i]);
-            } else if (args[i].equals(SEPARATION)) {
+            } else if (args[i].equals(RECOGNITION)) {
                 i++;
                 if (i >= args.length) {
                     usage();
                 }
-                separationMode= Integer.parseInt(args[i]);
-                switch (separationMode){
-                    case 0:
-                        separationMode = OCRConnector.REL_SYMBOL;
-                        break;
-                    case 1:
-                        separationMode= OCRConnector.REL_WORD;
-                        break;
-                    default:
-                        usage();
-                        break;
+                if(args[i].equals("character")){
+                    recognitionMode = OCRConnector.REL_SYMBOL;
+                }else if(args[i].equals("word")){
+                    recognitionMode= OCRConnector.REL_WORD;
+                }else{
+                    usage();
                 }
 
             }else {
@@ -181,7 +176,7 @@ public class OCRToPDF {
                 .println("Usage: java -jar pdfbox-app-x.y.z.jar OCRToPDF [OPTIONS] <Source PDF file> <Target PDF file>\n"
                         + "  -startPage <number>          The first page to start extraction(1 based)\n"
                         + "  -endPage <number>            The last page to extract(inclusive)\n"
-                        + "  -s <number>                  Separation Mode 0 - Character Level, 1 - Word Level\n"
+                        + "  -mode <number>               Recognition Mode character - Character Level, word - Word Level\n"
                         + "  <Source PDF file>            The PDF document to use\n"
                         + "  <Target PDF file>            The target PDF document\n");
         System.exit(1);
