@@ -151,8 +151,7 @@ public class OCRText {
 							pdfFile.length() - 4) + ext).getAbsolutePath();
 				}
 				if (useNonSeqParser) {
-					document = PDDocument.loadNonSeq(new File(pdfFile), null,
-							password);
+					document = PDDocument.loadNonSeq(new File(pdfFile), password);
 				} else {
 					document = PDDocument.load(pdfFile, force);
 					if (document.isEncrypted()) {

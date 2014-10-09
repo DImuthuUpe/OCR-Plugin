@@ -113,7 +113,7 @@ public class PDFOCRTextStripper extends PDFTextStripper {
     		codePoints[i] = c.charAt(i);
     	}
     	
-    	PDFont font = new PDType1Font();
+    	PDFont font = PDType1Font.HELVETICA;
     	float fontSizeText = widthText/c.length();
     	float spaceWidthDisp = fontSizeText/2; // This is an approximation for space width
 
