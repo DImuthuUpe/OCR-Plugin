@@ -1,0 +1,15 @@
+language: java
+before_install:
+	echo 'Building Local Dependencies'
+	mkdir local_dependencies
+	cd local_dependencies
+	git clone https://github.com/apache/pdfbox.git
+	cd pdfbox
+	mvn clean install -DskipTests
+	cd ..
+	git clone https://github.com/DImuthuUpe/Tesseract-API.git
+	cd Tesseract-API
+	mvn clean install
+	
+install: mvn install -Dmaven.compiler.target=1.6 -Dmaven.compiler.source=1.6 -DskipTests=true
+script: mvn test -Dmaven.compiler.target=1.6 -Dmaven.compiler.source=1.6
