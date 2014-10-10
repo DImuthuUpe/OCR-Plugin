@@ -36,7 +36,7 @@ public class TesseractOCRConnector implements OCRConnector{
 
 
 	public boolean init() {
-		return api.init(TessBaseAPI.DEFAULT_DATA_PATH,TessBaseAPI.DEFAULT_LANG);
+		return api.init(TessBaseAPI.DEFAULT_LANG);
 	}
 
 
